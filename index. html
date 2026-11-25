@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebCraft — портфолио мини-сайтов</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070f;--text:#eef0ff;--muted:#8b8ba8;
+  --acc1:#6c5ce7;--acc2:#00d2ff;--acc3:#ff3d9a;
+  --grad2:linear-gradient(135deg,#6c5ce7,#00d2ff);
+  --r:22px;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;cursor:none;
+}
+#cursor-glow{position:fixed;width:520px;height:520px;border-radius:50%;
+  background:radial-gradient(circle,rgba(108,92,231,.16) 0%,rgba(0,210,255,.07) 35%,transparent 70%);
+  pointer-events:none;z-index:0;transform:translate(-50%,-50%);will-change:transform}
+#cursor-dot{position:fixed;width:10px;height:10px;border-radius:50%;background:var(--acc2);
+  pointer-events:none;z-index:9999;transform:translate(-50%,-50%);
+  box-shadow:0 0 18px var(--acc2),0 0 40px rgba(0,210,255,.5);
+  transition:width .25s,height .25s,background .25s}
+#cursor-dot.hover{width:26px;height:26px;background:var(--acc1);box-shadow:0 0 30px var(--acc1)}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;opacity:.5}
+.orb1{width:55vw;height:55vw;top:-20%;left:-15%;background:radial-gradient(circle,#6c5ce7,transparent 70%);animation:o1 18s ease-in-out infinite}
+.orb2{width:50vw;height:50vw;bottom:-25%;right:-15%;background:radial-gradient(circle,#00d2ff,transparent 70%);animation:o2 22s ease-in-out infinite}
+.orb3{width:35vw;height:35vw;top:35%;left:60%;background:radial-gradient(circle,#ff3d9a,transparent 70%);opacity:.28;animation:o3 16s ease-in-out infinite}
+@keyframes o1{0%,100%{transform:translate(0,0)}50%{transform:translate(8vw,6vh)}}
+@keyframes o2{0%,100%{transform:translate(0,0)}50%{transform:translate(-6vw,-8vh)}}
+@keyframes o3{0%,100%{transform:translate(0,0)}50%{transform:translate(-5vw,5vh)}}
+.container{max-width:1280px;margin:0 auto;padding:0 24px;position:relative;z-index:2}
+
+/* HERO */
+.hero{min-height:90vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:100px 0 70px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:9px 22px;border-radius:50px;
+  background:rgba(108,92,231,.12);border:1px solid rgba(108,92,231,.35);
+  font-size:.8rem;letter-spacing:2px;text-transform:uppercase;color:var(--acc2);
+  margin-bottom:30px;backdrop-filter:blur(10px);animation:fadeUp .9s ease forwards}
+.hero-badge::before{content:'';width:8px;height:8px;border-radius:50%;background:#00ff9d;box-shadow:0 0 12px #00ff9d;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+.hero h1{font-size:clamp(2.6rem,7.5vw,6rem);font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:26px;opacity:0;animation:fadeUp .9s .12s ease forwards}
+.hero h1 .grad{background:linear-gradient(120deg,#6c5ce7,#00d2ff 35%,#ff3d9a 70%,#6c5ce7);background-size:300% 100%;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gShift 6s linear infinite}
+@keyframes gShift{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+.hero p{font-size:clamp(1rem,1.8vw,1.2rem);color:var(--muted);max-width:660px;margin-bottom:44px;opacity:0;animation:fadeUp .9s .25s ease forwards}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;opacity:0;animation:fadeUp .9s .38s ease forwards}
+.btn{position:relative;display:inline-flex;align-items:center;gap:10px;padding:16px 36px;border-radius:50px;
+  font-weight:600;font-size:1rem;text-decoration:none;transition:all .35s cubic-bezier(.34,1.56,.64,1);cursor:none;border:none}
+.btn-primary{background:var(--grad2);color:#fff;box-shadow:0 10px 40px rgba(108,92,231,.45)}
+.btn-primary:hover{transform:translateY(-4px) scale(1.04);box-shadow:0 16px 50px rgba(0,210,255,.55)}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.15)}
+.btn-ghost:hover{border-color:var(--acc2);color:var(--acc2);transform:translateY(-4px);box-shadow:0 10px 30px rgba(0,210,255,.2)}
+
+/* СЕКЦИЯ */
+.portfolio{padding:70px 0 140px}
+.sec-title{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:800;text-align:center;margin-bottom:14px;letter-spacing:-.02em}
+.sec-sub{text-align:center;color:var(--muted);margin-bottom:16px;font-size:1rem}
+.sec-hint{text-align:center;color:var(--acc2);font-size:.9rem;margin-bottom:60px;opacity:.85}
+
+/* СЕТКА */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:36px;perspective:1400px}
+
+/* КАРТОЧКА */
+.card{position:relative;background:linear-gradient(160deg,rgba(22,22,42,.9),rgba(12,12,24,.95));
+  border-radius:var(--r);border:1px solid rgba(255,255,255,.07);overflow:hidden;
+  transition:transform .5s cubic-bezier(.23,1,.32,1),box-shadow .5s,border-color .5s;
+  transform-style:preserve-3d;cursor:none;opacity:0;animation:fadeUp .8s ease forwards}
+.card:nth-child(1){animation-delay:.1s}
+.card:nth-child(2){animation-delay:.28s}
+.card:nth-child(3){animation-delay:.46s}
+.card::before{content:'';position:absolute;inset:-1px;border-radius:var(--r);padding:1px;
+  background:linear-gradient(135deg,transparent 30%,rgba(108,92,231,.6),rgba(0,210,255,.6),transparent 70%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .5s;pointer-events:none;z-index:5}
+.card:hover{transform:translateY(-14px);box-shadow:0 30px 80px rgba(108,92,231,.28)}
+.card:hover::before{opacity:1}
+
+/* ОКНО БРАУЗЕРА + ЖИВОЙ IFRAME */
+.browser{margin:16px;border-radius:14px;overflow:hidden;background:#000;border:1px solid rgba(255,255,255,.08);position:relative}
+.browser-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:linear-gradient(180deg,#1a1a2e,#12121f);border-bottom:1px solid rgba(255,255,255,.06)}
+.dot{width:11px;height:11px;border-radius:50%}
+.dot.r{background:#ff5f56}.dot.y{background:#ffbd2e}.dot.g{background:#27c93f}
+.url{flex:1;margin-left:10px;padding:5px 14px;border-radius:6px;background:rgba(255,255,255,.05);
+  font-size:.7rem;color:var(--muted);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-family:monospace}
+.url::before{content:'🔒 ';font-size:.65rem}
+.live-badge{display:flex;align-items:center;gap:5px;font-size:.6rem;text-transform:uppercase;letter-spacing:1.5px;color:#00ff9d;font-weight:700}
+.live-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:#00ff9d;box-shadow:0 0 10px #00ff9d;animation:pulse 1.5s infinite}
+
+.preview-wrap{position:relative;width:100%;aspect-ratio:16/10;overflow:hidden;background:#0a0a14}
+.preview-wrap iframe{
+  position:absolute;top:0;left:0;width:1280px;height:800px;border:0;
+  transform-origin:top left;pointer-events:none;
+  filter:saturate(1.05);
+  transition:filter .4s;
+}
+.card:hover .preview-wrap iframe{filter:saturate(1.15) brightness(1.05)}
+.preview-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-weight:800;color:rgba(255,255,255,.15);font-size:1.4rem;letter-spacing:2px;z-index:0;text-align:center;padding:20px}
+.preview-overlay{
+  position:absolute;inset:0;z-index:3;display:flex;align-items:flex-end;justify-content:flex-end;
+  padding:12px;opacity:0;transition:opacity .35s;
+  background:linear-gradient(to top,rgba(7,7,15,.85),transparent 45%);
+}
+.card:hover .preview-overlay{opacity:1}
+.preview-cta{
+  display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:50px;
+  background:var(--grad2);color:#fff;font-weight:700;font-size:.85rem;
+  box-shadow:0 8px 30px rgba(108,92,231,.5);transform:translateY(10px);transition:transform .35s;
+}
+.card:hover .preview-cta{transform:translateY(0)}
+
+/* ИНФО */
+.card-info{padding:22px 26px 26px;position:relative;z-index:2}
+.card-info h3{font-size:1.25rem;font-weight:800;margin-bottom:8px;letter-spacing:-.01em}
+.card-info p{font-size:.88rem;color:var(--muted);margin-bottom:16px;line-height:1.55}
+.tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}
+.tag{font-size:.72rem;padding:4px 12px;border-radius:20px;color:var(--muted);
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);transition:all .3s}
+.card:hover .tag{border-color:rgba(108,92,231,.4);color:var(--acc2)}
+.open-btn{
+  display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:12px;
+  background:rgba(108,92,231,.15);border:1px solid rgba(108,92,231,.4);color:var(--acc2);
+  font-weight:700;font-size:.9rem;text-decoration:none;transition:all .3s;cursor:none;width:100%;justify-content:center;
+}
+.open-btn:hover{background:var(--grad2);color:#fff;border-color:transparent;box-shadow:0 10px 30px rgba(108,92,231,.5);transform:translateY(-2px)}
+
+/* ФУТЕР */
+.footer{text-align:center;padding:50px 0 70px;color:var(--muted);font-size:.9rem;border-top:1px solid rgba(255,255,255,.06);position:relative;z-index:2}
+.footer a{color:var(--acc2);text-decoration:none;transition:all .3s;position:relative}
+.footer a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--acc2);transition:width .3s}
+.footer a:hover::after{width:100%}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:768px){
+  body{cursor:auto}
+  #cursor-dot,#cursor-glow{display:none}
+  .hero{min-height:80vh;padding:70px 0 50px}
+  .cards{grid-template-columns:1fr;gap:28px}
+}
+@media(max-width:420px){
+  .hero-actions{flex-direction:column;width:100%}
+  .btn{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<div id="cursor-glow"></div>
+<div id="cursor-dot"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<div class="container">
+
+  <section class="hero">
+    <div class="hero-badge">WebCraft · живые сайты</div>
+    <h1>Мини-сайты,<br><span class="grad">которые работают</span></h1>
+    <p>Портфолио с живыми предпросмотрами. Внутри каждой карточки — настоящий сайт, который можно открыть и посмотреть целиком. Нажми на карточку — перейдёшь на рабочую версию.</p>
+    <div class="hero-actions">
+      <a href="#portfolio" class="btn btn-primary">Смотреть проекты</a>
+      <a href="https://max.ru/u/f9LHodD0cOLoauGZCBZgTggTj1vj3JID3ZW5GRiVG2RHGu7cXQlTPci7sfE" target="_blank" rel="noopener" class="btn btn-ghost">Написать в MAX</a>
+    </div>
+  </section>
+
+  <section class="portfolio" id="portfolio">
+    <h2 class="sec-title">Избранные проекты</h2>
+    <p class="sec-sub">Живой предпросмотр внутри карточки — реальная работа сайта</p>
+    <p class="sec-hint">Клик по карточке открывает сайт в новой вкладке →</p>
+
+    <div class="cards">
+
+      <!-- 1 -->
+      <div class="card" data-url="https://master-romanrf.github.io/">
+        <div class="browser">
+          <div class="browser-bar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="url">master-romanrf.github.io</span>
+            <span class="live-badge">live</span>
+          </div>
+          <div class="preview-wrap">
+            <div class="preview-fallback">Мастер Роман</div>
+            <iframe src="https://master-romanrf.github.io/" loading="lazy" title="Мастер Роман" sandbox="allow-scripts allow-same-origin"></iframe>
+            <div class="preview-overlay"><span class="preview-cta">Открыть сайт ↗</span></div>
+          </div>
+        </div>
+        <div class="card-info">
+          <h3>Мастер Роман</h3>
+          <p>Лендинг для частного мастера по ремонту стиральных машин: вызов, гарантии, оплата после ремонта.</p>
+          <div class="tags"><span class="tag">HTML/CSS</span><span class="tag">Адаптив</span><span class="tag">Оплата</span></div>
+          <a href="https://master-romanrf.github.io/" target="_blank" rel="noopener" class="open-btn" onclick="event.stopPropagation()">Открыть живой сайт ↗</a>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="card" data-url="https://master-romanrf.github.io/corolla150">
+        <div class="browser">
+          <div class="browser-bar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="url">master-romanrf.github.io/corolla150</span>
+            <span class="live-badge">live</span>
+          </div>
+          <div class="preview-wrap">
+            <div class="preview-fallback">Corolla 150</div>
+            <iframe src="https://master-romanrf.github.io/corolla150" loading="lazy" title="Corolla 150" sandbox="allow-scripts allow-same-origin"></iframe>
+            <div class="preview-overlay"><span class="preview-cta">Открыть сайт ↗</span></div>
+          </div>
+        </div>
+        <div class="card-info">
+          <h3>Corolla 150</h3>
+          <p>Гид по ремонту и обслуживанию Toyota Corolla 150: регламент ТО, калькулятор, чек-листы, Pro-контент.</p>
+          <div class="tags"><span class="tag">Справочник</span><span class="tag">Калькулятор</span><span class="tag">Монетизация</span></div>
+          <a href="https://master-romanrf.github.io/corolla150" target="_blank" rel="noopener" class="open-btn" onclick="event.stopPropagation()">Открыть живой сайт ↗</a>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="card" data-url="https://master-romanrf.github.io/banners">
+        <div class="browser">
+          <div class="browser-bar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="url">master-romanrf.github.io/banners</span>
+            <span class="live-badge">live</span>
+          </div>
+          <div class="preview-wrap">
+            <div class="preview-fallback">Banners</div>
+            <iframe src="https://master-romanrf.github.io/banners" loading="lazy" title="Banners" sandbox="allow-scripts allow-same-origin"></iframe>
+            <div class="preview-overlay"><span class="preview-cta">Открыть сайт ↗</span></div>
+          </div>
+        </div>
+        <div class="card-info">
+          <h3>Banners</h3>
+          <p>Промо-страница: 8 готовых баннеров, тексты для соцсетей и инструкция по установке ярлыка.</p>
+          <div class="tags"><span class="tag">Промо</span><span class="tag">Баннеры</span><span class="tag">Инструкция</span></div>
+          <a href="https://master-romanrf.github.io/banners" target="_blank" rel="noopener" class="open-btn" onclick="event.stopPropagation()">Открыть живой сайт ↗</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>WebCraft · мини-сайты для малого бизнеса</p>
+    <p style="margin-top:10px">
+      <a href="https://max.ru/u/f9LHodD0cOLoauGZCBZgTggTj1vj3JID3ZW5GRiVG2RHGu7cXQlTPci7sfE" target="_blank" rel="noopener">Написать в MAX</a>
+    </p>
+  </div>
+</footer>
+
+<script>
+/* ===== КУРСОР ===== */
+const glow=document.getElementById('cursor-glow'),dot=document.getElementById('cursor-dot');
+let mx=innerWidth/2,my=innerHeight/2,gx=mx,gy=my;
+addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px'});
+(function a(){gx+=(mx-gx)*.08;gy+=(my-gy)*.08;glow.style.left=gx+'px';glow.style.top=gy+'px';requestAnimationFrame(a)})();
+document.querySelectorAll('a,.card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>dot.classList.add('hover'));
+  el.addEventListener('mouseleave',()=>dot.classList.remove('hover'));
+});
+
+/* ===== МАСШТАБ ЖИВЫХ IFRAME ===== */
+function scaleFrames(){
+  document.querySelectorAll('.preview-wrap').forEach(w=>{
+    const f=w.querySelector('iframe');
+    if(!f)return;
+    const s=w.clientWidth/1280;
+    f.style.transform=`scale(${s})`;
+  });
+}
+addEventListener('load',scaleFrames);
+addEventListener('resize',scaleFrames);
+scaleFrames();
+
+/* ===== 3D-НАКЛОН ===== */
+document.querySelectorAll('.card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5;
+    const y=(e.clientY-r.top)/r.height-.5;
+    card.style.transform=`translateY(-14px) rotateY(${x*6}deg) rotateX(${-y*6}deg)`;
+  });
+  card.addEventListener('mouseleave',()=>card.style.transform='');
+});
+
+/* ===== КЛИК ПО КАРТОЧКЕ → ЖИВОЙ САЙТ ===== */
+document.querySelectorAll('.card').forEach(card=>{
+  card.addEventListener('click',()=>{
+    const url=card.dataset.url;
+    if(url)window.open(url,'_blank','noopener');
+  });
+});
+
+/* ===== ПАРАЛЛАКС ОРБОВ ===== */
+addEventListener('scroll',()=>{
+  const y=scrollY;
+  document.querySelector('.orb1').style.transform=`translate(${y*.02}px,${y*.03}px)`;
+  document.querySelector('.orb2').style.transform=`translate(${-y*.02}px,${-y*.03}px)`;
+});
+</script>
+
+</body>
+</html>
